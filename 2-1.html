@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>2-1</title>
+	<script type="text/javascript" src="jquery-1.12.4.min.js"></script>
+	<script>
+	 function checkbox1(obj,cName) { 
+    var checkboxs = document.getElementsByName(cName); 
+    for(var i=0;i<checkboxs.length;i++){
+    	checkboxs[i].checked = obj.checked;
+    } 
+    } 
+	</script>
+</head>
+<body>
+	<!--點一下全選後所有checkbox 會全勾，再點一下會全部取消，禁止使用jquery-->
+	<input type="button" value="全選" name="clickall"  onclick="check_all(this,'c')"></br>
+	1.桌子<input type="checkbox" name="user_active_col[]" value="1"></br>
+	2.椅子<input type="checkbox" name="user_active_col[]" value="2"></br>
+	3.電視<input type="checkbox" name="user_active_col[]" value="3"></br>
+	4.洗衣機<input type="checkbox" name="user_active_col[]" value="4"></br>
+	5.廚房<input type="checkbox" name="user_active_col[]" value="5"></br>
+	6.浴室<input type="checkbox" name="user_active_col[]" value="6"></br>
+</body>
+</body>
+</html>

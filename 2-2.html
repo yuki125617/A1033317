@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>2-2</title>
+	<script type="text/javascript" src="jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="selectboxes.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+	
+</head>
+<body>
+	<!--使用ajax從後台抓出資料-->
+	<form>
+	<!--此為範例 請自行修改-->
+
+		<select name="YourLocation" id="select1">
+　			<option value="Taipei">台北市</option>
+			<option value="Tainan">台南市</option>
+　			<option value="Kaohsiung">高雄市</option>
+		</select>
+		<?php
+		$host_sql = 'localhost';
+        $username_sql = 'rootphp';
+        $password_sql = 'classforphp';
+
+        $link = mysql_connect($host_sql, $username_sql, $password_sql) or die('無法連結資料庫');
+
+        mysql_select_db('2', $link);
+
+        mysql_query('SET NAMES UTF8');
+
+        // 動態取得第一階層下拉式選單
+        $query = 'SELECT id, name FROM city WHERE city_name = 1';
+
+        $result = mysql_query($query, $link);
+
+        while ($row = mysql_fetch_assoc($result)) {
+
+            echo '<option value="' . $row['id'] $row['name'] . '</option>' . '>\n';
+
+        }
+		?>
+		<select name="area" id="select2">
+			<option value="">請選擇</option>
+		</select>
+		<?php
+        $host_sql = 'localhost';
+        $username_sql = 'rootphp';
+        $password_sql = 'classforphp';
+
+    $link = mysql_connect($host_sql, $username_sql, $password_sql) or die('無法連結資料庫');
+
+    mysql_select_db('2', $link);
+
+    mysql_query('SET NAMES UTF8');
+
+    $data['0'] = '請選擇';
+
+    if (0 !== (int) $_GET['id'] && 0 !== (int) $_GET['lv']) {
+
+        $parentId = (int) $_GET['id'];
+        $levelNum = (int) $_GET['lv'];
+
+
+        $query = sprintf("SELECT id, name FROM area WHERE city_no = %d AND area_name = %d", $city_no, $area_name);
+        $result = mysql_query($query, $link);
+        while ($row = mysql_fetch_assoc($result)) {
+
+            $data[$row['id']] = $row['name'];
+
+        }
+
+    }
+
+
+    echo json_encode($data);
+
+index.js：
+$(function () {
+
+
+    var defaultValue = false;
+
+    if (0 < $.trim($('#fullIdPath').val()).length) {
+
+        $fullIdPath = $('#fullIdPath').val().split(',');
+
+        defaultValue = true;
+
+    }
+
+
+    if (defaultValue) {
+
+        $('#select1').selectOptions($fullIdPath[0]); 
+
+    }
+
+
+    $('#select1').change(function () {
+
+        // 觸發第二階下拉式選單
+        $('#select2').removeOption(/.?/).ajaxAddOption(
+
+            'action.php', 
+
+            { 'id': $(this).val(), 'lv': 2 }, 
+
+            false, 
+
+            function () {
+
+                
+
+                if (defaultValue) {
+
+                    $(this).selectOptions($fullIdPath[1]).trigger('change');
+
+                } else {
+
+                    $(this).selectOptions().trigger('change');
+
+                }
+
+            }
+
+        )
+
+
+    }).trigger('change');
+
+
+});
+		?>
+	</form>
+	<!--3-3題-->縣市+區域<input type="text" id="address"></br>
+	<!--加分題(需chrome可用)--><input type="button" value="下載">
+</body>
+</body>
+</html>
+
+
